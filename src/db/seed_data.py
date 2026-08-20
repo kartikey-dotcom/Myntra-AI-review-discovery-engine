@@ -3,7 +3,7 @@ Seed Dataset Generator for Myntra Wishlist Purchase-Conversion & Review Intellig
 Populates SQLite DB with realistic e-commerce customer feedback spanning all 7 wishlist conversion categories.
 """
 
-from src.db.database import get_connection, init_db, insert_sku, insert_user
+from src.db.database import get_connection, insert_sku, insert_user
 from src.services.event_pipeline import ReviewEventPipeline
 
 SAMPLE_SKUS = [
@@ -49,7 +49,6 @@ SAMPLE_REVIEWS_DATA = [
 ]
 
 def seed_database():
-    init_db()
     print("Seeding wishlist purchase-conversion review dataset into myntra_reviews.db...")
     
     # Insert SKUs

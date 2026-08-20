@@ -8,8 +8,11 @@ def get_connection() -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     return conn
 
+_IS_SEEDING = False
+
 def init_db():
     """Initialize database tables from schema.sql if not exists."""
+    global _IS_SEEDING
     schema_file = os.path.join(os.path.dirname(__file__), "schema.sql")
     with open(schema_file, "r", encoding="utf-8") as f:
         schema_sql = f.read()
@@ -52,15 +55,19 @@ def init_db():
         )
         conn.commit()
         
-        # Check if DB is empty and auto-seed initial dataset (Skip during pytest)
-        if "PYTEST_CURRENT_TEST" not in os.environ:
+        # Check if DB is empty and auto-seed initial dataset (Skip during pytest or active seeding)
+        if not _IS_SEEDING and "PYTEST_CURRENT_TEST" not in os.environ:
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*) as count FROM reviews")
             count = cursor.fetchone()["count"]
             if count == 0:
+                _IS_SEEDING = True
                 conn.close()
-                from src.db.seed_data import seed_database
-                seed_database()
+                try:
+                    from src.db.seed_data import seed_database
+                    seed_database()
+                finally:
+                    _IS_SEEDING = False
                 return
     finally:
         try:
