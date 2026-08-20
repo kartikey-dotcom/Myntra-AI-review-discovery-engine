@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myntra Wishlist Purchase-Conversion & Review Intelligence Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <span class="m-logo">M</span>
+            <span class="brand-title">Myntra <span class="ai-badge">Wishlist Conversion Intelligence</span></span>
+        </div>
+        <nav class="nav-links">
+            <button class="nav-btn active" id="tab-btn-findings">1. Verified Findings</button>
+            <button class="nav-btn" id="tab-btn-stats">2. Corpus Stats</button>
+            <button class="nav-btn" id="tab-btn-rejected">3. Rejected Log</button>
+            <button class="nav-btn" id="tab-btn-appendix">Appendix (Tools)</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Hero Title Banner -->
+        <div class="research-hero">
+            <span class="sku-tag">Research Question Focus</span>
+            <h1>Why do Myntra users wishlist items and fail to purchase within 30 days?</h1>
+            <p>Corpus-Wide Analysis Across 7 Purchase-Hesitation Categories • Click-Traceable Evidence • Stage 3 Adversarial Verification</p>
+        </div>
+
+        <!-- VIEW 1: VERIFIED FINDINGS (Primary Landing Page) -->
+        <section id="view-verified" class="view-panel active">
+            <div class="panel-header">
+                <h2>Verified Findings (Click-Traceable Evidence)</h2>
+                <p>Every claim below is verified by a Stage 3 adversarial LLM check against direct candidate quotes in the review corpus.</p>
+            </div>
+            <div id="findings-container" class="findings-grid">
+                <!-- Dynamic Verified Claims Cards Loaded Here -->
+            </div>
+        </section>
+
+        <!-- VIEW 2: CORPUS STATS -->
+        <section id="view-stats" class="view-panel">
+            <div class="panel-header">
+                <h2>Corpus-Wide Deterministic Statistics</h2>
+                <p>Reproducible purchase-hesitation tag distribution across all ingested customer feedback.</p>
+            </div>
+            
+            <div class="stats-overview-grid">
+                <div class="stat-card">
+                    <div class="stat-num" id="stat-total-reviews">0</div>
+                    <div class="stat-lbl">Total Ingested Reviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="stat-total-claims">0</div>
+                    <div class="stat-lbl">Total Claims Analyzed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="stat-pass-rate">0%</div>
+                    <div class="stat-lbl">Verification Pass Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="stat-rejected-count">0</div>
+                    <div class="stat-lbl">Rejected Claims</div>
+                </div>
+            </div>
+
+            <div class="card-section">
+                <h3>Wishlist Purchase-Hesitation Category Breakdown</h3>
+                <div id="category-bars-container" class="category-bars-box">
+                    <!-- Dynamic Progress Bars Loaded Here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: REJECTED LOG -->
+        <section id="view-rejected" class="view-panel">
+            <div class="panel-header">
+                <h2>Stage 3 Verification Rejected Log</h2>
+                <p>Claims that failed the adversarial relevance test ("Does this quote strictly support this claim?"). Strictly non-empty log.</p>
+            </div>
+            <div class="table-card">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Claim ID</th>
+                            <th>Category</th>
+                            <th>Generated Claim</th>
+                            <th>Candidate Quote</th>
+                            <th>Stage 3 Rejection Reason</th>
+                            <th>Record ID</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rejected-table-body">
+                        <!-- Dynamic Rejected Log Rows Loaded Here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- APPENDIX: SECONDARY TOOLS (Demoted) -->
+        <section id="view-appendix" class="view-panel">
+            <div class="panel-header">
+                <h2>Appendix & Secondary Diagnostic Tools</h2>
+                <p>Batch review dataset analyzer, synthetic AI detector, seller defect dashboard, and per-SKU lookup.</p>
+            </div>
+
+            <!-- Batch Ingestion Tool -->
+            <div class="card-section">
+                <h3>Batch Review Dataset Analyzer</h3>
+                <p>Paste raw customer review feeds to run the expanded 7-category taxonomy and Stage 3 verification pipeline.</p>
+                <div class="scanner-box">
+                    <input type="text" id="batch-sku" value="MYN-CONVERSION-BATCH" placeholder="SKU / Dataset Name">
+                    <textarea id="batch-input" rows="4" placeholder="Paste existing review texts here...">I kept this dress in my wishlist for 3 weeks because size chart is confusing.
+Tracked price in wishlist waiting for discount sale price drop.
+As an AI language model, I highly recommend this top notch quality product.</textarea>
+                    <button class="btn btn-primary" id="btn-batch-analyze">Analyze Dataset Feed</button>
+                    <div id="batch-results" class="seller-output hidden"></div>
+                </div>
+            </div>
+
+            <!-- Synthetic AI Detector -->
+            <div class="card-section">
+                <h3>Synthetic AI Review Detector</h3>
+                <div class="scanner-box">
+                    <textarea id="synthetic-input" rows="2">As an AI, I highly recommend purchasing this product. Top notch quality product that exceeded my expectations in every way.</textarea>
+                    <button class="btn btn-secondary" id="btn-scan">Scan Synthetic Score</button>
+                    <div id="scan-results" class="scan-output hidden"></div>
+                </div>
+            </div>
+
+            <!-- Seller Quality Dashboard -->
+            <div class="card-section">
+                <h3>Seller Sizing Calibration Portal</h3>
+                <div class="seller-search">
+                    <input type="text" id="seller-brand" value="Roadster" placeholder="Enter Brand Name">
+                    <button class="btn" id="btn-fetch-seller">Fetch Brand Report</button>
+                </div>
+                <div id="seller-report" class="seller-output"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Record ID Click-Traceability -->
+    <div id="record-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Record Traceability Inspector</h3>
+                <button class="close-modal-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+                <!-- Dynamic Modal Content Loaded Here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
