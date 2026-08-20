@@ -21,7 +21,7 @@ def get_secret(key: str, default: str = "") -> str:
     return default
 
 class Config:
-    PROJECT_NAME: str = get_secret("PROJECT_NAME", "Myntra AI Review Engine")
+    PROJECT_NAME: str = get_secret("PROJECT_NAME", "Myntra AI Review Discovery Engine")
     VERSION: str = "1.0.0"
     API_PREFIX: str = get_secret("API_PREFIX", "/api/v1")
     ENVIRONMENT: str = get_secret("ENVIRONMENT", "development")

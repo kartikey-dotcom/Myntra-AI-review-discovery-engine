@@ -18,7 +18,7 @@ init_db()
 
 # Streamlit Page Configuration
 st.set_page_config(
-    page_title="Myntra Wishlist Purchase-Conversion & Review Intelligence Engine",
+    page_title="Myntra AI Review Discovery Engine",
     page_icon="🛍️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -36,7 +36,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header Section
-st.markdown('<div class="main-header">Myntra AI Wishlist Purchase-Conversion Engine</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">Myntra AI Review Discovery Engine</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Research Focus: <em>"Why do Myntra users wishlist items and fail to purchase within 30 days — and what moves them to purchase?"</em></div>', unsafe_allow_html=True)
 
 # Sidebar Info
