@@ -20,6 +20,13 @@ def init_db():
     conn = get_connection()
     try:
         conn.executescript(schema_sql)
+        # Migration check: add source_platform if missing in reviews table
+        try:
+            conn.execute("ALTER TABLE reviews ADD COLUMN source_platform TEXT DEFAULT 'Play Store'")
+            conn.commit()
+        except Exception:
+            pass
+
         # Create review_aspects table if not present
         conn.execute(
             """
@@ -121,8 +128,8 @@ def save_review(review_data: Dict[str, Any]) -> str:
             INSERT INTO reviews (
                 review_id, sku_id, user_id, rating, raw_text, sanitized_text,
                 detected_language, height_cm, weight_kg, body_build, size_worn,
-                fit_feedback, moderation_status, pii_redacted, is_synthetic, synthetic_confidence
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                fit_feedback, moderation_status, pii_redacted, is_synthetic, synthetic_confidence, source_platform
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 review_data["review_id"],
@@ -140,7 +147,8 @@ def save_review(review_data: Dict[str, Any]) -> str:
                 review_data.get("moderation_status", "APPROVED"),
                 review_data.get("pii_redacted", 0),
                 review_data.get("is_synthetic", 0),
-                review_data.get("synthetic_confidence", 0.0)
+                review_data.get("synthetic_confidence", 0.0),
+                review_data.get("source_platform", "Play Store")
             )
         )
         

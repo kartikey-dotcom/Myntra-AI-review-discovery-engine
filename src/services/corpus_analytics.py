@@ -4,7 +4,7 @@ from src.db.database import get_connection
 
 class CorpusAnalyticsEngine:
     """
-    Computes corpus-wide purchase-conversion statistics and click-traceable claim logs.
+    Computes corpus-wide purchase-conversion statistics and click-traceable claim logs across multi-source platforms.
     """
 
     TAXONOMY_CATEGORIES = [
@@ -26,6 +26,16 @@ class CorpusAnalyticsEngine:
             # Total Ingested Reviews Count
             cursor.execute("SELECT COUNT(*) as total FROM reviews")
             total_reviews = cursor.fetchone()["total"]
+
+            # Source Platform Breakdown (Play Store, App Store, Reddit)
+            cursor.execute("SELECT COUNT(*) as count FROM reviews WHERE source_platform = 'Play Store'")
+            play_store_count = cursor.fetchone()["count"]
+
+            cursor.execute("SELECT COUNT(*) as count FROM reviews WHERE source_platform = 'App Store'")
+            app_store_count = cursor.fetchone()["count"]
+
+            cursor.execute("SELECT COUNT(*) as count FROM reviews WHERE source_platform = 'Reddit'")
+            reddit_count = cursor.fetchone()["count"]
 
             # Total Claims Evaluated
             cursor.execute("SELECT COUNT(*) as total FROM conversion_claims")
@@ -54,6 +64,11 @@ class CorpusAnalyticsEngine:
 
             return {
                 "total_corpus_reviews": total_reviews,
+                "source_breakdown": {
+                    "Play Store": play_store_count,
+                    "App Store": app_store_count,
+                    "Reddit": reddit_count
+                },
                 "total_claims_evaluated": total_claims,
                 "verified_claims_count": verified_count,
                 "rejected_claims_count": rejected_count,
@@ -70,7 +85,7 @@ class CorpusAnalyticsEngine:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT c.claim_id, c.category, c.claim_text, c.quote, c.review_id, c.sku_id, r.user_id, r.height_cm, r.weight_kg, r.size_worn, r.sanitized_text as full_review_text
+                SELECT c.claim_id, c.category, c.claim_text, c.quote, c.review_id, c.sku_id, r.user_id, r.height_cm, r.weight_kg, r.size_worn, r.source_platform, r.sanitized_text as full_review_text
                 FROM conversion_claims c
                 JOIN reviews r ON c.review_id = r.review_id
                 WHERE c.verification_status = 'VERIFIED'
@@ -90,7 +105,7 @@ class CorpusAnalyticsEngine:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT c.claim_id, c.category, c.claim_text, c.quote, c.rejection_reason, c.review_id, c.sku_id, r.sanitized_text as full_review_text
+                SELECT c.claim_id, c.category, c.claim_text, c.quote, c.rejection_reason, c.review_id, c.sku_id, r.source_platform, r.sanitized_text as full_review_text
                 FROM conversion_claims c
                 JOIN reviews r ON c.review_id = r.review_id
                 WHERE c.verification_status = 'REJECTED'

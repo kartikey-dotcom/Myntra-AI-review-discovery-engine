@@ -62,8 +62,9 @@ class ReviewEventPipeline:
             "fit_feedback": fit_feedback,
             "moderation_status": mod_status,
             "pii_redacted": 1 if pii_redacted else 0,
-            "is_synthetic": 1 if synth_score >= 0.70 else 0,
+            "is_synthetic": 1 if synth_score > 0.6 else 0,
             "synthetic_confidence": synth_score,
+            "source_platform": payload.get("source_platform", "Play Store"),
             "extracted_aspects": extracted_aspects
         }
         

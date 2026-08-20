@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     pii_redacted INTEGER DEFAULT 0,
     is_synthetic INTEGER DEFAULT 0,
     synthetic_confidence REAL DEFAULT 0.0,
+    source_platform TEXT DEFAULT 'Play Store',
     
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (sku_id) REFERENCES skus(sku_id),

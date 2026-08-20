@@ -49,7 +49,10 @@ async function loadVerifiedFindings() {
         container.innerHTML = list.map(item => `
             <div class="finding-card">
                 <div>
-                    <span class="finding-category-pill">${item.category.replace(/_/g, ' ')}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                        <span class="finding-category-pill">${item.category.replace(/_/g, ' ')}</span>
+                        <span class="finding-category-pill" style="background:rgba(255,255,255,0.1); color:#ffffff; font-size:0.75rem;">${item.source_platform || 'Play Store'}</span>
+                    </div>
                     <div class="finding-claim">"${item.claim_text}"</div>
                     <div class="quote-box">"${item.quote}"</div>
                 </div>
@@ -74,10 +77,17 @@ async function loadCorpusStats() {
         const resp = await fetch("/api/v1/corpus/analytics");
         const data = await resp.json();
 
-        document.getElementById("stat-total-reviews").innerText = data.total_corpus_reviews || 0;
-        document.getElementById("stat-total-claims").innerText = data.total_claims_evaluated || 0;
+        document.getElementById("stat-total-reviews").innerText = (data.total_corpus_reviews || 0).toLocaleString();
+        document.getElementById("stat-total-claims").innerText = (data.total_claims_evaluated || 0).toLocaleString();
         document.getElementById("stat-pass-rate").innerText = `${data.verification_pass_rate_pct || 0}%`;
-        document.getElementById("stat-rejected-count").innerText = data.rejected_claims_count || 0;
+        document.getElementById("stat-rejected-count").innerText = (data.rejected_claims_count || 0).toLocaleString();
+
+        const sourceData = data.source_breakdown || {};
+        if (document.getElementById("stat-playstore-count")) {
+            document.getElementById("stat-playstore-count").innerText = (sourceData["Play Store"] || 0).toLocaleString();
+            document.getElementById("stat-appstore-count").innerText = (sourceData["App Store"] || 0).toLocaleString();
+            document.getElementById("stat-reddit-count").innerText = (sourceData["Reddit"] || 0).toLocaleString();
+        }
 
         const catContainer = document.getElementById("category-bars-container");
         if (!catContainer) return;

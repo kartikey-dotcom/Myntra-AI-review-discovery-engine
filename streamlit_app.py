@@ -85,17 +85,25 @@ with tab1:
 # TAB 2: CORPUS STATS
 # ==============================================================================
 with tab2:
-    st.subheader("2. Corpus-Wide Deterministic Statistics")
-    st.caption("Reproducible category distribution across all 7 wishlist purchase-hesitation categories.")
+    st.subheader("2. Multi-Source Review Corpus Statistics")
+    st.caption("Reproducible category distribution across 4,420 real customer feedback records.")
     
     stats = CorpusAnalyticsEngine.get_corpus_stats()
     
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Total Ingested Reviews", stats["total_corpus_reviews"])
-    col2.metric("Total Claims Evaluated", stats["total_claims_evaluated"])
+    col1.metric("Total Ingested Reviews", f"{stats['total_corpus_reviews']:,}")
+    col2.metric("Total Claims Evaluated", f"{stats['total_claims_evaluated']:,}")
     col3.metric("Verification Pass Rate", f"{stats['verification_pass_rate_pct']}%")
-    col4.metric("Rejected Claims", stats["rejected_claims_count"])
+    col4.metric("Rejected Claims", f"{stats['rejected_claims_count']:,}")
     
+    st.divider()
+    st.subheader("🌐 Multi-Source Ingestion Breakdown")
+    s_break = stats.get("source_breakdown", {})
+    sc1, sc2, sc3 = st.columns(3)
+    sc1.metric("Google Play Store Reviews", f"{s_break.get('Play Store', 0):,}")
+    sc2.metric("Apple App Store Reviews", f"{s_break.get('App Store', 0):,}")
+    sc3.metric("Reddit Feedback & Discussions", f"{s_break.get('Reddit', 0):,}")
+
     st.divider()
     st.subheader("Wishlist Purchase-Hesitation Category Breakdown")
     
